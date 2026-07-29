@@ -58,7 +58,7 @@ export async function sendCAPIPurchase(data: CAPIEventData): Promise<void> {
     event_name:       'Purchase',
     event_time:       Math.floor(Date.now() / 1000),
     action_source:    'website',
-    event_source_url: data.sourceUrl ?? 'https://your-domain.com/imersao-claude-junho/',
+    event_source_url: data.sourceUrl ?? 'https://your-domain.com/pagina-a/',
     user_data,
     custom_data: {
       value:        data.value,

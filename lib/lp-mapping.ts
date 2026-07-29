@@ -2,7 +2,7 @@
 // Mapping de slugs de LPs do funil → versão + headline + status.
 // Preencha com as SUAS páginas e anúncios — os valores abaixo são apenas exemplos.
 
-export type LPVersion = 'ICM3' | 'V1' | 'V2' | 'V3' | 'V4' | 'V5' | '?'
+export type LPVersion = 'V1' | 'V2' | 'V3' | 'V4' | 'V5' | '?'
 
 export interface LPInfo {
   version: LPVersion
@@ -85,7 +85,7 @@ export function detectAdHook(ad_name: string): string {
 // ─────────────────────────────────────────────────────────────────────────────
 export type Coherence = 'green' | 'yellow' | 'red'
 
-// Promessa da LP junho (ICM3): "ensina, constrói e implementa o ecossistema de
+// Exemplo de regra de congruência entre gancho do anúncio e promessa da LP.
 // escala com Claude em 48h — não é aula, é fazedoria".
 export const AD_COHERENCE: Record<string, { level: Coherence; reason: string }> = {
   // Congruência anúncio ↔ landing page.
@@ -108,12 +108,12 @@ export function detectCoherence(
   if (lp.status === 'unknown') {
     return { level: 'red', reason: 'LP de destino não mapeada — sem correlação validável (checar a URL do anúncio)' }
   }
-  // Comparação só conecta numa headline de comparação (variante imersao-claude-gpt)
+  // Comparação só conecta numa headline de comparação (variante de comparação)
   if (COMPARISON_ADS.has(ad_name)) {
-    if (lp.slug === 'imersao-claude-gpt') {
+    if (lp.slug === 'pagina-comparativo') {
       return { level: 'green', reason: 'gancho de comparação ↔ headline "ChatGPT vs Claude" da variante — conecta na hora' }
     }
-    return { level: 'yellow', reason: 'gancho de comparação numa headline de construção — apontar p/ imersao-claude-gpt vira 🟢' }
+    return { level: 'yellow', reason: 'gancho de comparação numa headline de construção — apontar p/ pagina-comparativo vira 🟢' }
   }
   const direct = AD_COHERENCE[ad_name]
   if (direct) return direct

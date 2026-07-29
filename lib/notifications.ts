@@ -65,7 +65,7 @@ export async function sendEmail(subject: string, html: string): Promise<void> {
 
   const resend = new Resend(apiKey)
   await resend.emails.send({
-    from: 'Mitologia Alerts <onboarding@resend.dev>',
+    from: 'Ads Dashboard Alerts <onboarding@resend.dev>',
     to: [to],
     subject,
     html,
@@ -131,7 +131,7 @@ export async function sendHealthAlerts(alerts: HealthAlert[]): Promise<void> {
   }
 
   const embed: DiscordEmbed = {
-    title: `${emoji} ${title} — Funil Mitologia`,
+    title: `${emoji} ${title} — Funil`,
     description: lines.join('\n'),
     color: hasRed ? 0xE53E3E : 0xF0B429,
     fields: [
@@ -167,7 +167,7 @@ export async function sendHealthAlerts(alerts: HealthAlert[]): Promise<void> {
   `
 
   // ── Telegram: texto compacto com as métricas em alerta
-  const tgLines: string[] = [`${emoji} <b>${title} — Funil Mitologia</b>\n`]
+  const tgLines: string[] = [`${emoji} <b>${title} — Funil</b>\n`]
   if (redAlerts.length > 0) {
     tgLines.push('🔴 <b>CRÍTICO:</b>')
     for (const a of redAlerts) {
@@ -187,7 +187,7 @@ export async function sendHealthAlerts(alerts: HealthAlert[]): Promise<void> {
 
   await Promise.allSettled([
     sendDiscord([embed]),
-    sendEmail(`${emoji} ${title} — Mitologia Dashboard`, emailHtml),
+    sendEmail(`${emoji} ${title} — Ads Dashboard`, emailHtml),
     sendTelegram(tgLines.join('\n')),
   ])
 }

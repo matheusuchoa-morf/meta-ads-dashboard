@@ -4,8 +4,10 @@ import { fetchAdInsights, fetchAdInsightsTimeRange, fetchAdThumbnails, fetchAdLa
 import { classifyCampaign } from '@/lib/campaign-classifier'
 import { requireAuth } from '@/lib/auth'
 import { getDriveCreative } from '@/lib/drive-creatives'
+import { DEMO_MODE, DEMO_ADS } from '@/lib/demo-data'
 
 export async function GET(req: NextRequest) {
+  if (DEMO_MODE) return NextResponse.json(DEMO_ADS)
   const unauthorized = await requireAuth()
   if (unauthorized) return unauthorized
 

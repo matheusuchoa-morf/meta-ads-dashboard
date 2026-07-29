@@ -5,6 +5,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { NextRequest, NextResponse } from 'next/server'
 import { fetchHotmartSales } from '@/lib/hotmart-api'
+import { DEMO_MODE, DEMO_HOTMART } from '@/lib/demo-data'
 
 // ─── Date range helpers ─────────────────────────────────────────────────────
 // ⚠️  O servidor Vercel roda em UTC. O negócio opera no fuso de São Paulo
@@ -45,7 +46,7 @@ function getDateRange(preset: string): { start: Date; end: Date } {
 }
 
 // ─── Source classification ──────────────────────────────────────────────────
-// Classifica o source_sck do Hotmart. Formato ICM3: "facebook|paid|icm3-frio|<adset>|<ad>".
+// Classifica o source_sck do Hotmart. Formato: "facebook|paid|<campanha>|<adset>|<ad>".
 // Retorna o tipo (metaAds/organic/other) E a campanha (frio/quente) quando identificável.
 function classifySource(sck: string): {
   type: 'metaAds' | 'organic' | 'other'
@@ -53,9 +54,9 @@ function classifySource(sck: string): {
 } {
   if (!sck) return { type: 'other', campaign: null }
   const lower = sck.toLowerCase()
-  // ICM3 (sck novo, corrente)
-  if (lower.includes('icm3-frio'))   return { type: 'metaAds', campaign: 'frio' }
-  if (lower.includes('icm3-quente')) return { type: 'metaAds', campaign: 'quente' }
+  // formato corrente
+  if (lower.includes('-frio'))   return { type: 'metaAds', campaign: 'frio' }
+  if (lower.includes('-quente')) return { type: 'metaAds', campaign: 'quente' }
   // Meta Ads genérico (sck antigo IC2 ou paid sem tag de edição / com IDs longos)
   if (
     lower.includes('facebook|paid') ||
@@ -93,6 +94,7 @@ export interface HotmartData {
 
 // ─── GET handler ────────────────────────────────────────────────────────────
 export async function GET(req: NextRequest) {
+  if (DEMO_MODE) return NextResponse.json(DEMO_HOTMART)
   const preset = req.nextUrl.searchParams.get('datePreset') ?? 'last_7d'
   const since = req.nextUrl.searchParams.get('since')
   const until = req.nextUrl.searchParams.get('until')

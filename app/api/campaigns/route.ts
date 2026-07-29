@@ -3,8 +3,10 @@ import { NextResponse } from 'next/server'
 import { fetchCampaigns } from '@/lib/meta-api'
 import { classifyCampaign } from '@/lib/campaign-classifier'
 import { requireAuth } from '@/lib/auth'
+import { DEMO_MODE, DEMO_CAMPAIGNS } from '@/lib/demo-data'
 
 export async function GET() {
+  if (DEMO_MODE) return NextResponse.json(DEMO_CAMPAIGNS)
   const unauthorized = await requireAuth()
   if (unauthorized) return unauthorized
 

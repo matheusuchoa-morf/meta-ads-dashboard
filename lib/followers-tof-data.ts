@@ -1,6 +1,6 @@
 // lib/followers-tof-data.ts
 // ─────────────────────────────────────────────────────────────────────────────
-// Snapshot VERIFICADO do ToF "[Trafego] [seguidores] - Imersão Claude"
+// Snapshot do trafego de topo de funil (objetivo PROFILE_VISIT).
 // (campanha YOUR_CAMPAIGN_ID, objetivo PROFILE_VISIT). Dois recortes por
 // anúncio: HOJE e LIFETIME (acumulado), pro toggle da aba Seguidores.
 //

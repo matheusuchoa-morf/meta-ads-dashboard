@@ -1,35 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" fill="none" stroke="#C9A45A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-  <!-- Outer circle -->
-  <circle cx="320" cy="320" r="300"/>
-  <!-- Inner circle -->
-  <circle cx="320" cy="320" r="260"/>
-  <!-- Sun/dome -->
-  <circle cx="320" cy="175" r="35"/>
-  <!-- Roof triangle -->
-  <path d="M175 280 L320 170 L465 280"/>
-  <!-- Roof beam -->
-  <line x1="160" y1="285" x2="480" y2="285"/>
-  <line x1="165" y1="295" x2="475" y2="295"/>
-  <!-- Columns -->
-  <!-- Column 1 -->
-  <path d="M215 300 C215 300 205 310 205 315 L205 460"/>
-  <path d="M235 300 C235 300 245 310 245 315 L245 460"/>
-  <path d="M210 300 C210 300 225 310 240 300"/>
-  <!-- Column 2 -->
-  <path d="M295 300 C295 300 285 310 285 315 L285 460"/>
-  <path d="M315 300 C315 300 325 310 325 315 L325 460"/>
-  <path d="M290 300 C290 300 305 310 320 300"/>
-  <!-- Column 3 -->
-  <path d="M375 300 C375 300 365 310 365 315 L365 460"/>
-  <path d="M395 300 C395 300 405 310 405 315 L405 460"/>
-  <path d="M370 300 C370 300 385 310 400 300"/>
-  <!-- Column 4 -->
-  <path d="M435 300 C435 300 425 310 425 315 L425 460"/>
-  <path d="M455 300 C455 300 465 310 465 315 L465 460"/>
-  <path d="M430 300 C430 300 445 310 460 300"/>
-  <!-- Base -->
-  <line x1="180" y1="460" x2="460" y2="460"/>
-  <!-- Waves at bottom -->
-  <path d="M100 490 Q200 470 320 500 Q440 530 560 490"/>
-  <path d="M80 520 Q200 500 320 530 Q440 560 580 520"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#c8a06a" stroke-width="3" stroke-linecap="round">
+  <circle cx="32" cy="32" r="29" opacity="0.35"/>
+  <path d="M18 42V30"/>
+  <path d="M27 42V22"/>
+  <path d="M36 42V34"/>
+  <path d="M45 42V18"/>
 </svg>

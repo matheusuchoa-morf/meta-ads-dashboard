@@ -7,6 +7,7 @@ import {
   sumActions, maxRoas, linkClicks,
   PURCHASE_PATTERNS, LEAD_PATTERNS,
 } from '@/lib/action-matchers'
+import { DEMO_MODE, DEMO_INSIGHTS } from '@/lib/demo-data'
 
 function aggregateInsights(insights: InsightsData[]) {
   let totalSpend = 0
@@ -58,6 +59,7 @@ function getPrevDateRange(datePreset: string): { since: string; until: string } 
 }
 
 export async function GET(req: NextRequest) {
+  if (DEMO_MODE) return NextResponse.json(DEMO_INSIGHTS)
   const { searchParams } = req.nextUrl
   const datePreset = searchParams.get('datePreset') ?? 'last_7d'
   const tagFilter = searchParams.get('tagFilter') ?? ''

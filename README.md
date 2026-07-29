@@ -31,10 +31,18 @@ pnpm dev
 Abra http://localhost:3000. O acesso é protegido por uma senha simples
 (`DASHBOARD_PASSWORD`) — defina a sua no `.env.local`.
 
-### Modo demo
+### Modo demo (parcial)
 
-Sem credenciais em mãos? Rode com `DEMO_MODE=true` no `.env.local` para navegar
-com dados fake, sem chamar nenhuma API externa.
+Com `DEMO_MODE=true` no `.env.local`, as rotas de API (`/api/campaigns`,
+`/api/insights`, `/api/funnel`, `/api/ads`, `/api/hotmart`, `/api/clarity`,
+`/api/instagram`, `/api/youtube`, `/api/email-campaigns`) devolvem dados
+fictícios e **nenhuma chamada externa é feita** — útil para explorar o código e
+a navegação sem credenciais.
+
+⚠️ O modo demo é **parcial**: os payloads de exemplo em `lib/demo-data.ts` não
+cobrem todos os formatos que os componentes esperam, então várias seções ficam
+em estado de carregamento. Para ver o painel populado de verdade, configure as
+credenciais reais no `.env.local`. PRs melhorando o `demo-data.ts` são bem-vindos.
 
 ## Credenciais que você precisa criar
 

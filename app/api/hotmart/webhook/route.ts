@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
     contentName: productName,
     contentIds:  productId ? [productId] : [],
     eventId:     transaction  || undefined,   // deduplicação com pixel browser
-    sourceUrl:   'https://your-domain.com/imersao-claude-junho/',
+    sourceUrl:   'https://your-domain.com/pagina-a/',
   }).catch(err => console.error('[CAPI] Falha silenciosa:', err))
 
   // ── 2. Alerta de venda (Discord / Telegram) ──────────────────────────────

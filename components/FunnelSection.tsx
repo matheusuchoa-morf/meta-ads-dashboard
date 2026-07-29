@@ -9,7 +9,7 @@ import { AlertTriangle, TrendingUp } from 'lucide-react'
 import type { FunnelStage, HealthMetric } from '@/lib/funnel-resolver'
 
 // ── Page filter config ────────────────────────────────────────────────────────
-// ICM3 (junho 2026): LP unificada (/imersao-claude-junho/) — frio + quente ativos.
+// LP unificada — campanhas de frio + quente apontando para a mesma página.
 // Dropdown permite filtrar o funil por campanha específica ou ver tudo somado.
 const PAGE_FILTERS: { id: string; label: string; campaignIds: string[] | null }[] = [
   { id: 'all',       label: 'Todas as campanhas',          campaignIds: null },

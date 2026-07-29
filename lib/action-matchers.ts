@@ -17,7 +17,8 @@ export const PURCHASE_PATTERNS: readonly (string | RegExp)[] = [
   'onsite_web_purchase',
   'onsite_web_app_purchase',
   'offsite_conversion.fb_pixel_purchase',
-  'offsite_conversion.custom.2400677647118380', // "IC2 Purchase (Imersao Claude Maio)" — type PURCHASE
+  // Se você usa CONVERSÃO PERSONALIZADA de compra, some o id dela aqui:
+  // 'offsite_conversion.custom.<SEU_ID>',
 ]
 
 export const LEAD_PATTERNS: readonly (string | RegExp)[] = [

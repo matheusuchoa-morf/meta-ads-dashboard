@@ -32,7 +32,7 @@ const AUTO_PAUSE_OVERRIDES: Record<string, number> = {
 // caro porque público quente/15D tem cycle maior antes de converter).
 // Match: case-insensitive includes em campaign_name.
 // Estabelecido 25/04/2026: ads RMKT IC2 com público 15D + ROAS forte merecem R$50 (vs R$35 padrão).
-// ICM3 (decisão Matheus 19/06/2026): frio pausa em R$42 / quente em R$60 (0 checkout no dia).
+// Stop-loss: frio pausa em R$42 / quente em R$60 sem checkout no dia. Ajuste ao seu CPA.
 // Match: case-insensitive includes em campaign_name. Quente vem antes de frio (mais específico).
 const AUTO_PAUSE_CAMPAIGN_NAME_OVERRIDES: Array<{ pattern: string; threshold: number; reason: string }> = [
   { pattern: 'quente',      threshold: 60, reason: 'Quente/RMKT — público quente, cycle de venda maior (R$60)' },
@@ -100,7 +100,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // ── 1. Resolve campaign IDs (Imersão Claude — inclui IC2 atual + IC legado) ──
+    // ── 1. Resolve campaign IDs (edição atual + legado) ──
     const allCampaigns = await fetchCampaigns()
     const icCampaigns = allCampaigns.filter(c => {
       const tag = classifyCampaign(c.name).tag
@@ -204,7 +204,7 @@ export async function GET(req: NextRequest) {
         for (let i = 0; i < newSalesCount; i++) {
           const sale = hotmartRes.recentSales?.[i]
           await sendSaleAlert({
-            product: sale?.product ?? 'Imersao Claude',
+            product: sale?.product ?? 'Produto',
             value: sale?.value ?? AVG_TICKET,
             source: sale?.source ?? 'Meta Ads',
             totalToday: totalSales,

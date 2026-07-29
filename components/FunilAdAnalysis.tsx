@@ -1,9 +1,9 @@
 // components/FunilAdAnalysis.tsx
-// Análise de tráfego direto (ICM3), divisível por parte:
+// Análise de tráfego direto, divisível por parte:
 //  - part="metrics" → resumão (CPA/CTR/CPM/Vendas/ROAS)
 //  - part="origem"  → de onde vieram as vendas (usado no Resumo)
 //  - part="ads"     → por-anúncio com status (🟢/⚪) + aba Período × Gasto total
-// Só anúncios de venda ICM3 (exclui tráfego de seguidores → aba Seguidores).
+// Só anúncios de venda (exclui tráfego de seguidores → aba Seguidores).
 'use client'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
@@ -162,7 +162,7 @@ export function FunilAdAnalysis({ datePreset, tagFilter, customRange, part = 'al
       {showMetrics && (
         <section className="rounded-xl border p-6" style={{ background: 'var(--mit-bg-card)', borderColor: 'var(--mit-border)' }}>
           <h2 className="text-xl font-semibold mb-4" style={{ color: 'var(--mit-gold)' }}>
-            Análise de tráfego direto — ICM3
+            Análise de tráfego direto
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {card('Gasto', fmtBRL(spend), 'tráfego pago')}
@@ -212,7 +212,7 @@ export function FunilAdAnalysis({ datePreset, tagFilter, customRange, part = 'al
         <section className="rounded-xl border p-6" style={{ background: 'var(--mit-bg-card)', borderColor: 'var(--mit-border)' }}>
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
             <h2 className="text-xl font-semibold" style={{ color: 'var(--mit-gold)' }}>
-              Por anúncio — ICM3
+              Por anúncio
             </h2>
             <div className="flex gap-2">
               {(['range', 'life'] as const).map(v => (
@@ -233,7 +233,7 @@ export function FunilAdAnalysis({ datePreset, tagFilter, customRange, part = 'al
           </div>
 
           {ads.length === 0 ? (
-            <p className="text-sm" style={{ color: 'var(--mit-text-subtle)' }}>Nenhum anúncio ICM3 no período.</p>
+            <p className="text-sm" style={{ color: 'var(--mit-text-subtle)' }}>Nenhum anúncio no período.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full min-w-[640px]">
@@ -298,7 +298,7 @@ export function FunilAdAnalysis({ datePreset, tagFilter, customRange, part = 'al
             </div>
           )}
           <p className="text-[11px] mt-3" style={{ color: 'var(--mit-text-subtle)' }}>
-            🟢 rodando · ⚪ pausado · Todo anúncio ICM3 que você sobe aparece aqui automaticamente — mesmo recém-ativado sem entrega
+            🟢 rodando · ⚪ pausado · Todo anúncio que você sobe aparece aqui automaticamente — mesmo recém-ativado sem entrega
             ainda (zerado, mas 🟢). A aba “Gasto total” mostra os que já gastaram, mesmo parados há dias.
             Anúncios de seguidores (ToF) ficam na aba Seguidores.
           </p>

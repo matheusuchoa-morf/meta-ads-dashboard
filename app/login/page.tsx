@@ -2,6 +2,9 @@
 import { useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 
+// Nome da marca exibido no painel. Defina NEXT_PUBLIC_BRAND_NAME no .env.local.
+const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME || 'ADS DASHBOARD'
+
 export default function LoginPage() {
   const router = useRouter()
   const [password, setPassword] = useState('')
@@ -44,8 +47,8 @@ export default function LoginPage() {
         <div className="text-center mb-10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/logo.png"
-            alt="Mitologia"
+            src="/logo.svg"
+            alt={BRAND}
             className="w-24 h-24 mx-auto mb-6"
             style={{ filter: 'drop-shadow(0 0 30px rgba(201,164,90,0.3))' }}
           />
@@ -53,7 +56,7 @@ export default function LoginPage() {
             className="text-2xl tracking-[0.3em] font-light mb-2"
             style={{ color: 'var(--mit-text)', fontFamily: 'var(--font-display)' }}
           >
-            MITOLOGIA
+            {BRAND}
           </h1>
           <p className="text-sm" style={{ color: 'var(--mit-text-subtle)' }}>
             Meta Ads Dashboard
@@ -143,7 +146,7 @@ export default function LoginPage() {
           className="text-center text-xs mt-8"
           style={{ color: 'rgba(138,155,160,0.5)' }}
         >
-          Morf Systems · Painel interno
+          {BRAND} · Painel interno
         </p>
       </div>
     </div>

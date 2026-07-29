@@ -9,28 +9,28 @@ export interface CampaignTagConfig {
 }
 
 // Ordem importa: o classificador usa first-match-wins.
-// ICM3 (junho) → ICM2 (maio) → ICM1 (abril). As edições mais novas e mais
+// Edições mais novas primeiro (first match wins). As mais novas e mais
 // específicas vêm primeiro para não serem capturadas pelo 'claude' genérico do IC.
 export const CAMPAIGN_TAGS: CampaignTagConfig[] = [
   {
-    // ICM3 — Junho. Vem antes de IC2/IC (first match wins).
+    // Edição mais recente. Vem primeiro (first match wins).
     tag: 'IC3',
-    label: 'ICM3 - Junho',
+    label: 'Lançamento 3',
     color: '#4CAF82',
-    keywords: ['ic3', 'icm3', 'ic 3', 'imersao claude 3', 'imersão claude 3', '[v2]', ' v2 ', 'junho']
+    keywords: ['lanc3', 'lancamento 3', 'lançamento 3']
   },
   {
     // IC2 must come before IC — first match wins in classifyCampaign()
     tag: 'IC2',
-    label: 'ICM2 - Maio',
+    label: 'Lançamento 2',
     color: '#4A9EE8',
-    keywords: ['ic2', 'ic2_', '_ic2', ' ic2 ', 'imersao claude 2', 'imersão claude 2']
+    keywords: ['lanc2', 'lancamento 2', 'lançamento 2']
   },
   {
     tag: 'IC',
-    label: 'ICM1 - Abril',
+    label: 'Lançamento 1',
     color: '#D97757',
-    keywords: ['imersao', 'imersão', 'claude', ' ic ', 'ic_', '_ic']
+    keywords: ['lanc1', 'lancamento 1', 'lançamento 1']
   },
   {
     tag: 'RP',

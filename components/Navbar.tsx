@@ -2,6 +2,9 @@
 import { useRouter, usePathname } from 'next/navigation'
 import { LogOut } from 'lucide-react'
 
+// Nome da marca exibido no painel. Defina NEXT_PUBLIC_BRAND_NAME no .env.local.
+const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME || 'ADS DASHBOARD'
+
 export function Navbar() {
   const router = useRouter()
   const pathname = usePathname()
@@ -25,13 +28,13 @@ export function Navbar() {
       {/* Brand */}
       <div className="flex items-center gap-3">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/logo.png" alt="Mitologia" className="w-9 h-9" />
+        <img src="/logo.svg" alt={BRAND} className="w-9 h-9" />
         <div className="flex items-baseline gap-2">
           <span
             className="text-sm tracking-[0.25em] font-light"
             style={{ color: 'var(--mit-gold)', fontFamily: 'var(--font-display)' }}
           >
-            MITOLOGIA
+            {BRAND}
           </span>
         </div>
       </div>

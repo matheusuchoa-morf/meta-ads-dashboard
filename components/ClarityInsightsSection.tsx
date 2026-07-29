@@ -15,7 +15,7 @@ interface PageSection {
   label: string
 }
 
-// Seções mapeadas da LP ICM3 (Edição Copa · 9 dobras)
+// Seções mapeadas da sua LP (ajuste aos blocos da sua página)
 const DEFAULT_SECTIONS: PageSection[] = [
   { start: 0,  end: 12, label: 'Hero' },
   { start: 12, end: 24, label: 'Problema' },
@@ -27,7 +27,7 @@ const DEFAULT_SECTIONS: PageSection[] = [
   { start: 92, end: 100, label: 'FAQ + CTA' },
 ]
 
-// Corpo da LP ICM3 — COMPARTILHADO por construcao + 48h (mesmo body, só o hero muda)
+// Corpo da LP — compartilhado entre variações que só mudam o hero
 // % MEDIDOS ao vivo na página real (offsetTop ÷ scrollHeight, 22/06): o preço fica em 62%
 const BODY_SECTIONS: PageSection[] = [
   { start: 0,  end: 9,   label: 'Hero' },
@@ -45,15 +45,15 @@ const BODY_SECTIONS: PageSection[] = [
 const PAGES = [
   {
     id: 'ic-48h',
-    label: 'ICM3 · 48h',
-    sublabel: 'LP ativa — variação "48h" (todos os ads ICM3 apontam aqui desde 22/06)',
+    label: 'Página A',
+    sublabel: 'LP ativa — para onde os anúncios apontam',
     url: 'https://your-domain.com/pagina-a/',
     sections: BODY_SECTIONS,
     trafficActive: true,
   },
   {
     id: 'ic-construcao',
-    label: 'ICM3 · Construção',
+    label: 'Página B',
     sublabel: 'Baseline — scroll médio 18%, 0 venda real. Tráfego migrado p/ 48h em 22/06',
     url: 'https://your-domain.com/pagina-b/',
     sections: BODY_SECTIONS,
@@ -61,7 +61,7 @@ const PAGES = [
   },
   {
     id: 'ic-junho',
-    label: 'Imersão Claude — Junho',
+    label: 'Página C',
     sublabel: 'LP original (Edição Copa) — referência histórica',
     url: 'https://your-domain.com/pagina-c/',
     sections: DEFAULT_SECTIONS,
@@ -388,7 +388,7 @@ export function ClarityInsightsSection() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h2 className="text-base font-semibold" style={{ color: 'var(--mit-gold)' }}>
-            Landing Page — Imersão Claude
+            Landing Page
           </h2>
           <p className="text-xs mt-0.5" style={{ color: 'var(--mit-text-subtle)' }}>
             Comportamento ao vivo via Microsoft Clarity · Project {PROJECT_ID}

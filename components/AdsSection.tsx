@@ -105,7 +105,7 @@ function isVideoAd(ad: AdRow): boolean {
 }
 
 /**
- * Hook Rate = reproduções de vídeo de ≥3s ÷ impressões (fórmula do Matheus).
+ * Hook Rate = reproduções de vídeo de ≥3s ÷ impressões.
  * A Meta deprecou o campo de 3s direto, então reconstruímos via curva de retenção
  * (video_play_curve_actions): 22 pontos do início (100%) ao fim (0%) do vídeo.
  * Interpolamos a retenção no tempo de 3s usando a duração: pos = 3/dur × (n-1).

@@ -4,6 +4,7 @@ import { fetchFunnelInsights, fetchFunnelInsightsTimeRange, fetchCampaigns } fro
 import { resolveFunnelType, buildPurchaseFunnel, buildLeadFunnel, buildHealthMetrics } from '@/lib/funnel-resolver'
 import { classifyCampaign } from '@/lib/campaign-classifier'
 import { requireAuth } from '@/lib/auth'
+import { DEMO_MODE, DEMO_FUNNEL } from '@/lib/demo-data'
 
 // Maps each date preset to the equivalent prior period for period-over-period
 const PREV_PRESET_MAP: Record<string, string> = {
@@ -13,6 +14,7 @@ const PREV_PRESET_MAP: Record<string, string> = {
 }
 
 export async function GET(req: NextRequest) {
+  if (DEMO_MODE) return NextResponse.json(DEMO_FUNNEL)
   const unauthorized = await requireAuth()
   if (unauthorized) return unauthorized
 

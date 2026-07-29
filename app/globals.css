@@ -11,7 +11,7 @@
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
 
-  /* Mitologia color palette */
+  /* Brand color palette */
   --color-mit-bg-base:     #1D282A;
   --color-mit-bg-dark:     #0F1015;
   --color-mit-bg-card:     #1D1F26;
@@ -25,7 +25,7 @@
   --color-mit-warning:     #F0B429;
   --color-mit-danger:      #E53E3E;
 
-  /* Mitologia font families */
+  /* Brand font families */
   --font-display: 'Classy Vogue', serif;
   --font-body:    'Gilroy', system-ui, sans-serif;
   --font-mono-brand: 'JetBrains Mono', monospace;
@@ -148,7 +148,7 @@
   }
 }
 
-/* ─── Mitologia Design Tokens ─────────────────────────────────────────────── */
+/* ─── Design Tokens ─────────────────────────────────────────────── */
 :root {
   --mit-bg-base:     #1D282A;
   --mit-bg-dark:     #0F1015;

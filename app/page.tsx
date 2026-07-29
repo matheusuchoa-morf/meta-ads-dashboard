@@ -26,14 +26,14 @@ const DATE_OPTIONS = [
   { label: 'Personalizado',  value: 'custom'   },
 ]
 
+// Filtros de edição/produto. A `value` é o prefixo/tag usada no NOME da campanha
+// no Meta (ex.: campanha "LANC1 [Vendas][Frio] - ..." casa com value 'LANC1').
+// Troque pelos seus produtos/edições.
 const TAG_OPTIONS = [
-  { label: 'Todos',              value: ''    },
-  { label: 'ICM3 - Junho',       value: 'IC3' },
-  { label: 'ICM2 - Maio',        value: 'IC2' },
-  { label: 'ICM1 - Abril',       value: 'IC'  },
-  { label: 'Relatório Proibido', value: 'RP'  },
-  { label: 'Jogo da Escala',     value: 'JDE' },
-  { label: 'Maior Faturamento',  value: 'MFH' },
+  { label: 'Todos',       value: ''      },
+  { label: 'Lançamento 1', value: 'LANC1' },
+  { label: 'Lançamento 2', value: 'LANC2' },
+  { label: 'Perpétuo',    value: 'PERP'  },
 ]
 
 interface CampaignTag { tag: string }
@@ -129,7 +129,7 @@ function DashboardContent() {
   const [datePreset, setDatePreset] = useState('today')
   const [customRange, setCustomRange] = useState<CustomRange>(null)
   const [showDatePicker, setShowDatePicker] = useState(false)
-  const [tagFilter, setTagFilter]   = useState('IC3')
+  const [tagFilter, setTagFilter]   = useState('')
 
   // Handle date preset change — "custom" opens picker, anything else clears custom range
   const handleDateChange = (v: string) => {
@@ -149,12 +149,12 @@ function DashboardContent() {
 
   const campaigns: Campaign[] = campaignsData?.campaigns ?? []
 
-  // Smart default: ICM3 (Junho) é a campanha corrente — seleciona se houver IC3 ativa
+  // Smart default: seleciona a primeira tag com campanha ativa
   const [defaultApplied, setDefaultApplied] = useState(false)
   useEffect(() => {
     if (!defaultApplied && campaigns.length > 0) {
-      const ic3Active = campaigns.filter(c => c.effective_status === 'ACTIVE' && c.tag.tag === 'IC3')
-      if (ic3Active.length > 0) setTagFilter('IC3')
+      const ic3Active = campaigns.filter(c => c.effective_status === 'ACTIVE')
+      if (ic3Active.length > 0) setTagFilter(ic3Active[0].tag.tag)
       setDefaultApplied(true)
     }
   }, [campaigns, defaultApplied])

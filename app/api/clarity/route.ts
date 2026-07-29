@@ -2,17 +2,18 @@
 // Proxy para a Clarity Data Export API.
 // Cache de 2h no Next.js para respeitar o limite de 10 req/dia por projeto.
 import { NextResponse } from 'next/server'
+import { DEMO_MODE, DEMO_CLARITY } from '@/lib/demo-data'
 
 const CLARITY_API = 'https://www.clarity.ms/export-data/api/v1/project-live-insights'
 const CACHE_SECONDS = 60 * 60 * 2 // 2 horas
 
 // Páginas monitoradas — filtramos a resposta por essas URLs
-// ICM3 (junho 2026): variação "Construção" é a LP corrente (todos os ads apontam aqui).
+// Configure abaixo as variações de LP que você quer acompanhar.
 // junho fica como referência histórica (tráfego migrado em 21/06).
 const TRACKED_PAGES = [
-  'https://your-domain.com/icm3-48h/',
-  'https://your-domain.com/icm3-construcao/',
-  'https://your-domain.com/imersao-claude-junho/',
+  'https://your-domain.com/pagina-b/',
+  'https://your-domain.com/pagina-c/',
+  'https://your-domain.com/pagina-a/',
 ]
 
 // ─── URL matching ───────────────────────────────────────────────────────────
@@ -152,6 +153,7 @@ function parseResponse(data: any[]): Record<string, ClarityPageMetrics> {
 
 // ─── GET handler ────────────────────────────────────────────────────────────
 export async function GET() {
+  if (DEMO_MODE) return NextResponse.json(DEMO_CLARITY)
   const token = process.env.CLARITY_API_TOKEN
   if (!token) {
     return NextResponse.json(

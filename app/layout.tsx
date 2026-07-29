@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Mitologia Dashboard',
-  description: 'Meta Ads Campaign Dashboard — Mitologia Edition',
+  title: process.env.NEXT_PUBLIC_BRAND_NAME ? `${process.env.NEXT_PUBLIC_BRAND_NAME} Dashboard` : 'Ads Dashboard',
+  description: 'Meta Ads Campaign Dashboard',
 }
 
 export const viewport: Viewport = {

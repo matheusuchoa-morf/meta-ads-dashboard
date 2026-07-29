@@ -10,20 +10,19 @@ interface Props {
 }
 
 // ─── Duas metas empilhadas ───────────────────────────────────────────────────
-// Topo  → ICM1 (abril) + ICM2 (maio): meta ANTIGA de 145, TRAVADA (edições
-//          encerradas, número não muda mais).
-// Baixo → ICM3 (junho): meta NOVA de 150, ao vivo. Conta a partir do dia em que
-//          as vendas de junho começaram (10/06).
+// Topo  → meta HISTÓRICA (edições encerradas), travada.
+// Baixo → meta ATUAL, ao vivo, contada a partir de CURRENT_CUTOFF.
+// Configure via NEXT_PUBLIC_GOAL_* no .env.local.
 const LIFETIME_SINCE   = '2025-01-01'
-const ICM3_CUTOFF      = '2026-06-10'   // 1ª venda da edição de junho
-const LEGACY_GOAL      = 145            // meta travada ICM1 + ICM2
-const ICM3_GOAL        = 150            // meta nova ICM3
+const CURRENT_CUTOFF      = process.env.NEXT_PUBLIC_GOAL_CUTOFF || '2025-01-01'  // 1ª venda da edição atual
+const LEGACY_GOAL      = Number(process.env.NEXT_PUBLIC_GOAL_LEGACY || 100)  // meta histórica (travada)
+const CURRENT_GOAL        = Number(process.env.NEXT_PUBLIC_GOAL_CURRENT || 100) // meta atual
 
 interface DailyPoint { date: string; sales: number; revenue: number }
 
 export function GoalTracker({ datePreset: _datePreset, customRange: _customRange }: Props) {
   // datePreset/customRange ignorados de propósito: as metas são acumuladas,
-  // não por período. Puxamos o histórico inteiro e separamos no corte de junho.
+  // não por período. Puxamos o histórico inteiro e separamos no corte configurado.
   const { data, isLoading } = useQuery({
     queryKey: ['hotmart-lifetime'],
     queryFn: () => {
@@ -35,8 +34,8 @@ export function GoalTracker({ datePreset: _datePreset, customRange: _customRange
 
   const daily: DailyPoint[] = data?.daily ?? []
   // Comparação lexicográfica de datas ISO (YYYY-MM-DD) funciona como ordenação real.
-  const legacyTotal = daily.filter(d => d.date <  ICM3_CUTOFF).reduce((s, d) => s + d.sales, 0)
-  const icm3Total   = daily.filter(d => d.date >= ICM3_CUTOFF).reduce((s, d) => s + d.sales, 0)
+  const legacyTotal = daily.filter(d => d.date <  CURRENT_CUTOFF).reduce((s, d) => s + d.sales, 0)
+  const currentTotal   = daily.filter(d => d.date >= CURRENT_CUTOFF).reduce((s, d) => s + d.sales, 0)
 
   if (isLoading) {
     return (
@@ -61,10 +60,10 @@ export function GoalTracker({ datePreset: _datePreset, customRange: _customRange
       className="rounded-xl border p-4 space-y-4"
       style={{ background: 'var(--mit-bg-card)', borderColor: 'var(--mit-border)' }}
     >
-      {/* ── Meta ANTIGA (ICM1 + ICM2) — travada ── */}
+      {/* ── Meta histórica — travada ── */}
       <GoalBar
-        title="Meta ICM1 + ICM2"
-        subtitle="abril · maio"
+        title="Meta histórica"
+        subtitle="edições encerradas"
         total={legacyTotal}
         goal={LEGACY_GOAL}
         locked
@@ -73,12 +72,12 @@ export function GoalTracker({ datePreset: _datePreset, customRange: _customRange
       {/* divisória sutil */}
       <div style={{ height: 1, background: 'var(--mit-border)' }} />
 
-      {/* ── Meta NOVA (ICM3) — ao vivo ── */}
+      {/* ── Meta atual — ao vivo ── */}
       <GoalBar
         title="Meta Atual"
-        subtitle="junho"
-        total={icm3Total}
-        goal={ICM3_GOAL}
+        subtitle="edição atual"
+        total={currentTotal}
+        goal={CURRENT_GOAL}
       />
     </div>
   )

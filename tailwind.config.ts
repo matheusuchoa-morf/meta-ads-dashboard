@@ -1,5 +1,5 @@
 // NOTE: This project uses Tailwind CSS v4 which uses CSS-based configuration.
-// The canonical Mitologia tokens live in app/globals.css under @theme inline.
+// The canonical design tokens live in app/globals.css under @theme inline.
 // This file is kept as a reference and for tooling that expects it.
 import type { Config } from "tailwindcss";
 
