@@ -8,8 +8,7 @@ const CLARITY_API = 'https://www.clarity.ms/export-data/api/v1/project-live-insi
 const CACHE_SECONDS = 60 * 60 * 2 // 2 horas
 
 // Páginas monitoradas — filtramos a resposta por essas URLs
-// Configure abaixo as variações de LP que você quer acompanhar.
-// junho fica como referência histórica (tráfego migrado em 21/06).
+// ⚠️ CONFIGURE AQUI: as URLs das SUAS páginas que o Clarity monitora.
 const TRACKED_PAGES = [
   'https://your-domain.com/pagina-b/',
   'https://your-domain.com/pagina-c/',

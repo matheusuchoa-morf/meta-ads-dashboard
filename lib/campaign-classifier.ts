@@ -9,8 +9,10 @@ export interface CampaignTagConfig {
 }
 
 // Ordem importa: o classificador usa first-match-wins.
-// Edições mais novas primeiro (first match wins). As mais novas e mais
-// específicas vêm primeiro para não serem capturadas pelo 'claude' genérico do IC.
+// ⚠️ CONFIGURE AQUI. O painel agrupa campanhas lendo o NOME delas no Meta e
+// procurando estas `keywords`. Se os nomes das suas campanhas não casarem com
+// nenhuma keyword, tudo cai em "Outros" e os filtros ficam vazios.
+// Ordem importa: first-match-wins — o mais específico vem primeiro.
 export const CAMPAIGN_TAGS: CampaignTagConfig[] = [
   {
     // Edição mais recente. Vem primeiro (first match wins).
@@ -34,21 +36,21 @@ export const CAMPAIGN_TAGS: CampaignTagConfig[] = [
   },
   {
     tag: 'RP',
-    label: 'Relatório Proibido',
+    label: 'Perpétuo',
     color: '#C9A45A',
-    keywords: ['relatorio', 'relatório', 'proibido', ' rp ', 'rp_', '_rp']
+    keywords: ['perp', 'perpetuo', 'perpétuo']
   },
   {
     tag: 'JDE',
-    label: 'Jogo da Escala',
+    label: 'Produto B',
     color: '#4CAF82',
-    keywords: ['escala', 'jogo', 'jde', ' jde']
+    keywords: ['produtob', 'produto b']
   },
   {
     tag: 'MFH',
-    label: 'Maior Faturamento',
+    label: 'Produto C',
     color: '#8B5CF6',
-    keywords: ['faturamento', 'historia', 'história', 'mfh']
+    keywords: ['produtoc', 'produto c']
   }
 ]
 
