@@ -103,9 +103,21 @@ ambiente (o endpoint valida esse token).
 ## 3. Deploy
 
 Pensado para **Vercel**. Configure as mesmas variáveis do `.env.example` em
-Project → Settings → Environment Variables. O cron horário
-(`.github/workflows/hourly-cron.yml`) faz um self-ping em `${{ vars.APP_URL }}/api/cron`
-— defina a variável `APP_URL` e o secret `CRON_SECRET` no GitHub.
+Project → Settings → Environment Variables.
+
+### Cron horário (opcional, vem desligado)
+
+`.github/workflows/hourly-cron.yml` faz um self-ping em `/api/cron` de hora em
+hora (é o que dispara as regras de stop-loss e as notificações). **O agendamento
+vem comentado de propósito** — um fork sem configuração ficaria falhando toda
+hora. Para ligar:
+
+1. Settings → Secrets and variables → Actions → **Variables** → crie `APP_URL`
+   = `https://seu-dominio.com` (sem barra no final)
+2. Aba **Secrets** → crie `CRON_SECRET` (mesmo valor da env var do deploy)
+3. Descomente o bloco `schedule:` no workflow
+
+Sem `APP_URL`, o job apenas emite um aviso e passa — não falha.
 
 ## 4. Segurança
 

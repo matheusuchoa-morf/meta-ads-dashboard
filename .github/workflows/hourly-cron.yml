@@ -1,12 +1,21 @@
-name: Hourly Health Cron (09h-22h BRT)
+name: Hourly Health Cron
 
-# BRT is UTC-3. Business hours 09h-22h BRT = 12h UTC through 01h UTC (next day).
-# Cron range splits em duas partes: 12-23 UTC (mesmo dia) + 0-1 UTC (dia seguinte).
-# Runs at minute :05 of each hour to avoid the top-of-the-hour cron flood.
+# ⚠️ TEMPLATE: o agendamento vem DESLIGADO de propósito.
+# Um fork sem `APP_URL` configurado falharia de hora em hora sem motivo.
+#
+# Para ligar no SEU projeto:
+#   1. Settings → Secrets and variables → Actions → Variables → nova variável
+#      `APP_URL` = https://seu-dominio.com  (sem barra no final)
+#   2. Na mesma tela, aba Secrets → novo secret `CRON_SECRET`
+#      (o mesmo valor da env var CRON_SECRET do seu deploy)
+#   3. Descomente o bloco `schedule` abaixo.
+#
+# BRT é UTC-3. Horário comercial 09h-22h BRT = 12h-23h UTC + 0h-1h UTC do dia seguinte.
+# Roda no minuto :05 para evitar a enxurrada de crons no topo da hora.
 on:
-  schedule:
-    - cron: '5 0-1,12-23 * * *'
-  workflow_dispatch:  # manual trigger from GitHub UI
+  # schedule:
+  #   - cron: '5 0-1,12-23 * * *'
+  workflow_dispatch:  # disparo manual pela UI do GitHub
 
 concurrency:
   group: hourly-cron
@@ -18,13 +27,20 @@ jobs:
     timeout-minutes: 3
     steps:
       - name: Hit /api/cron
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
+          if [ -z "$APP_URL" ]; then
+            echo "::warning::A variável APP_URL não está configurada — nada a pingar. Veja as instruções no topo deste arquivo."
+            exit 0
+          fi
           RESP=$(curl -sS -w '\nHTTP_STATUS:%{http_code}' \
-            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
-            "${{ vars.APP_URL }}/api/cron")
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "${APP_URL%/}/api/cron")
           echo "$RESP"
           STATUS=$(echo "$RESP" | tail -n1 | sed 's/HTTP_STATUS://')
           if [ "$STATUS" != "200" ]; then
-            echo "::error::Cron returned HTTP $STATUS"
+            echo "::error::Cron retornou HTTP $STATUS"
             exit 1
           fi
