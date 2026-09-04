@@ -2,7 +2,7 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const bizSdk = require('facebook-nodejs-business-sdk')
 
-const { AdAccount, Campaign, Ad } = bizSdk
+const { AdAccount, Campaign, AdSet, Ad } = bizSdk
 
 function initApi() {
   const token = process.env.META_ACCESS_TOKEN
@@ -586,4 +586,124 @@ export async function fetchAdLandingPages(
     if (link) map[d.id] = link
   }
   return map
+}
+
+/**
+ * Mensagem legível de um erro da Meta. O SDK guarda o corpo do erro em
+ * `.response`; quando existe, `error_user_msg` é o texto que a própria Meta
+ * escreveu pro anunciante ("o orçamento precisa ser maior que X", "essa
+ * campanha não usa orçamento de campanha") — muito melhor que o genérico.
+ */
+export function metaErrorMessage(err: unknown): string {
+  if (err && typeof err === 'object' && 'response' in err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const body = (err as any).response
+    const userMsg = body?.error_user_msg ?? body?.error?.error_user_msg
+    const title = body?.error_user_title ?? body?.error?.error_user_title
+    if (userMsg) return title ? `${title}: ${userMsg}` : String(userMsg)
+  }
+  return err instanceof Error ? err.message : 'Erro desconhecido na Meta'
+}
+
+// ─── Controle remoto: conjuntos, orçamento e gasto ──────────────────────────
+// Tudo aqui existe pra você mexer na conta longe do computador: ligar/desligar
+// campanha e conjunto, e mudar orçamento. Valores de orçamento na Meta vêm e vão
+// SEMPRE em centavos (BRL 2 casas) — R$ 150,00 = "15000".
+
+export interface AdSetData {
+  id: string
+  name: string
+  status: string
+  effective_status: string
+  daily_budget?: string
+  lifetime_budget?: string
+  campaign_id?: string
+  bid_strategy?: string
+}
+
+/** Conjuntos de uma campanha (id, nome, status e orçamento). */
+export async function fetchAdSets(campaignId: string): Promise<AdSetData[]> {
+  initApi()
+  const campaign = new Campaign(campaignId)
+  const adsets = await campaign.getAdSets(
+    ['id', 'name', 'status', 'effective_status', 'daily_budget', 'lifetime_budget', 'campaign_id', 'bid_strategy'],
+    { limit: 200 },
+  )
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return adsets.map((a: any) => a._data)
+}
+
+export async function updateAdSetStatus(
+  adSetId: string,
+  status: 'ACTIVE' | 'PAUSED'
+): Promise<void> {
+  initApi()
+  const adset = new AdSet(adSetId)
+  await adset.update({ status })
+}
+
+/** Campo de orçamento + valor em centavos. Só um dos dois por chamada — a Meta
+ *  rejeita trocar de diário pra vitalício (e vice-versa) num objeto já criado. */
+export interface BudgetPatch {
+  field: 'daily_budget' | 'lifetime_budget'
+  cents: number
+}
+
+export async function updateCampaignBudget(campaignId: string, patch: BudgetPatch): Promise<void> {
+  initApi()
+  const campaign = new Campaign(campaignId)
+  await campaign.update({ [patch.field]: String(patch.cents) })
+}
+
+export async function updateAdSetBudget(adSetId: string, patch: BudgetPatch): Promise<void> {
+  initApi()
+  const adset = new AdSet(adSetId)
+  await adset.update({ [patch.field]: String(patch.cents) })
+}
+
+/** Gasto por campanha no período (mapa campaign_id → reais). Campos mínimos —
+ *  é só pra mostrar "quanto já queimou hoje" ao lado do botão. */
+export async function fetchCampaignSpend(
+  datePreset: string = 'today',
+  campaignIds?: string[],
+): Promise<Record<string, number>> {
+  const { accountId } = initApi()
+  const account = new AdAccount(accountId)
+  const params: Record<string, unknown> = {
+    level: 'campaign',
+    date_preset: datePreset,
+    filtering: campaignIds?.length
+      ? [{ field: 'campaign.id', operator: 'IN', value: campaignIds }]
+      : [],
+  }
+  const rows = await account.getInsights(['campaign_id', 'spend'], params)
+  const out: Record<string, number> = {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  for (const r of rows as any[]) {
+    const d = r._data
+    if (d?.campaign_id) out[d.campaign_id] = parseFloat(d.spend ?? '0')
+  }
+  return out
+}
+
+/** Gasto por conjunto de UMA campanha (mapa adset_id → reais). */
+export async function fetchAdSetSpend(
+  campaignId: string,
+  datePreset: string = 'today',
+): Promise<Record<string, number>> {
+  const { accountId } = initApi()
+  const account = new AdAccount(accountId)
+  const params: Record<string, unknown> = {
+    level: 'adset',
+    date_preset: datePreset,
+    filtering: [{ field: 'campaign.id', operator: 'EQUAL', value: campaignId }],
+  }
+  const rows = await account.getInsights(['adset_id', 'spend'], params)
+  const out: Record<string, number> = {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  for (const r of rows as any[]) {
+    const d = r._data
+    if (d?.adset_id) out[d.adset_id] = parseFloat(d.spend ?? '0')
+  }
+  return out
 }

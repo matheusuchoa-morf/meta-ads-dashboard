@@ -9,6 +9,8 @@ integrado à Hotmart e saúde de página via Microsoft Clarity. Feito em **Next.
 ## O que ele mostra
 
 - **Resumo de campanhas** — investimento, CPM, CTR, cliques, funil por anúncio
+- **Controle remoto** — ligar/desligar e mudar orçamento de campanha, conjunto e
+  anúncio direto do celular (aba **Controle**)
 - **Funil** — visitas → conexão (connect rate) → checkout → compra
 - **Vendas (Hotmart)** — cruzamento de vendas reais com origem de anúncio (via `sck`)
 - **Saúde de página (Clarity)** — sessões, scroll, rage clicks
@@ -46,6 +48,41 @@ cobrem todos os formatos que os componentes esperam, então várias seções fic
 em estado de carregamento. Para ver o painel populado de verdade, configure as
 credenciais reais no `.env.local`. PRs melhorando o `demo-data.ts` são bem-vindos.
 
+## Controle remoto (aba "Controle")
+
+Feita pra mexer na conta longe do computador, do celular:
+
+| Nível | O que dá pra fazer |
+|---|---|
+| Campanha | ligar/desligar · mudar orçamento (**só com CBO**, veja abaixo) |
+| Conjunto | ligar/desligar · mudar orçamento diário/total |
+| Anúncio | ligar/desligar (mesmo controle da aba Anúncios) |
+
+**Proteções:**
+- Pausar é 1 clique. **Ativar**, **subir orçamento acima de +20%** e **cortar
+  pela metade ou mais** pedem confirmação.
+- O campo de orçamento entende o formato brasileiro: `1.500` = mil e quinhentos,
+  `150,50` = cento e cinquenta e cinquenta centavos, `150.50` também.
+- `META_MAX_DAILY_BUDGET` (em reais) é um teto conferido **no servidor** — a rota
+  recusa com 400 antes de falar com a Meta. Vazio = sem teto.
+- O toggle reflete o `status` do próprio objeto, não o `effective_status`. Conjunto
+  ativo dentro de campanha pausada aparece ligado com a nota *"pausado pela
+  campanha"* — ligar de novo não faria nada, e a tela diz isso em vez de mentir.
+- Com `DEMO_MODE=true` nenhuma mutação sai do servidor: a rota valida, responde
+  `{"demo": true}` e o toast avisa.
+
+**Limites reais, não bugs:**
+- Orçamento **na campanha** só existe em campanha com Advantage/CBO. Sem CBO o
+  campo vem nulo, a tela mostra *"sem CBO — orçamento fica nos conjuntos"* e o
+  dinheiro se muda no conjunto.
+- A Meta tem mínimos próprios por objetivo e moeda, e recusa valores abaixo.
+  Quando ela recusa, a rota devolve **502 com a mensagem da própria Meta** — é ela
+  que explica o motivo, não vale inventar tradução.
+- **Sem trilha de auditoria.** O painel não registra quem mudou o quê. Quem tiver
+  a senha do dashboard mexe no seu dinheiro. Use uma senha forte, única, e
+  considere pôr o deploy atrás de uma camada extra (Vercel Password Protection,
+  Cloudflare Access, VPN) antes de expor isso na internet aberta.
+
 ## 1. Credenciais que você precisa criar
 
 Requer **Node 20+**.
@@ -58,8 +95,8 @@ Requer **Node 20+**.
 | YouTube / ActiveCampaign / Resend / Telegram / Discord | veja `.env.example` | opcionais |
 
 **Sobre o token da Meta:**
-- Permissões: `ads_read` para ler; **`ads_management`** também, se quiser usar os
-  botões de pausar/ativar campanha e anúncio dentro do painel.
+- Permissões: `ads_read` para ler; **`ads_management`** também, se quiser usar a
+  aba **Controle** (pausar/ativar e mudar orçamento de campanha, conjunto e anúncio).
 - `META_AD_ACCOUNT_ID` vai **com o prefixo `act_`** (ex.: `act_1234567890`).
 - Tokens de usuário expiram. Para produção, gere um **token de longa duração**
   (ou de System User no Business Manager) — senão o painel para de responder em
@@ -123,6 +160,11 @@ Sem `APP_URL`, o job apenas emite um aviso e passa — não falha.
 
 - Nunca comite `.env.local` nem `client_secret.json` (ambos no `.gitignore`).
 - `META_ACCESS_TOKEN` e os secrets da Hotmart dão acesso à sua conta — trate como senha.
+- O acesso é **uma senha compartilhada só**, sem 2FA e sem limite de tentativas no
+  `/api/auth/login`. Com a aba Controle ligada, quem passar dessa senha muda o seu
+  investimento. Se o painel fica exposto na internet: senha longa e única,
+  `META_MAX_DAILY_BUDGET` definido, e de preferência uma camada de acesso na
+  frente (Vercel Password Protection / Cloudflare Access / VPN).
 
 ## Licença
 

@@ -8,6 +8,7 @@ import { DateRangePicker } from '@/components/DateRangePicker'
 import { formatDateRange, type CustomRange } from '@/lib/date-utils'
 import { FunnelSection } from '@/components/FunnelSection'
 import { AdControlsSection } from '@/components/AdControlsSection'
+import { CampaignControlsSection } from '@/components/CampaignControlsSection'
 import { AdPerformanceSection } from '@/components/AdPerformanceSection'
 import { TrendChart } from '@/components/TrendChart'
 import { ClarityInsightsSection } from '@/components/ClarityInsightsSection'
@@ -172,12 +173,13 @@ function DashboardContent() {
   return (
     <div className="max-w-5xl mx-auto space-y-5">
 
-      {/* ── Meta de ingressos (goal tracker) — oculto em Leads e Seguidores ── */}
-      {view !== 'leads' && view !== 'seguidores' && <GoalTracker datePreset={datePreset} customRange={customRange} />}
+      {/* ── Meta de ingressos (goal tracker) — oculto em Leads, Seguidores e Controle ── */}
+      {view !== 'leads' && view !== 'seguidores' && view !== 'controle' && <GoalTracker datePreset={datePreset} customRange={customRange} />}
 
       {/* ── Filter bar — oculto em Leads (seletor próprio) e Seguidores (snapshot fixo) ── */}
       {view !== 'leads' && view !== 'seguidores' && <div className="flex items-center gap-3 relative">
-        <FilterDropdown
+        {/* Controle é sempre "agora": o gasto mostrado é o de hoje, não tem período a escolher */}
+        {view !== 'controle' && <FilterDropdown
           value={datePreset}
           options={
             customRange
@@ -188,8 +190,8 @@ function DashboardContent() {
           }
           onChange={handleDateChange}
           accentColor="var(--mit-accent)"
-        />
-        {showDatePicker && (
+        />}
+        {showDatePicker && view !== 'controle' && (
           <DateRangePicker
             initialRange={customRange ?? undefined}
             onApply={(since, until) => {
@@ -231,6 +233,14 @@ function DashboardContent() {
           {/* Saúde do Funil (Clarity) — logo abaixo da pulsão de métricas */}
           <ClarityInsightsSection />
           <FunilAdAnalysis part="ads" datePreset={datePreset} tagFilter={tagFilter} customRange={customRange} />
+        </>
+      )}
+
+      {/* ── CONTROLE (remoto): campanha, conjunto e anúncio ── */}
+      {view === 'controle' && (
+        <>
+          <CampaignControlsSection tagFilter={tagFilter} />
+          <AdControlsSection tagFilter={tagFilter} />
         </>
       )}
 

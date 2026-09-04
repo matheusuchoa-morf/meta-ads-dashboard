@@ -1,6 +1,6 @@
-// app/api/campaigns/[id]/status/route.ts
+// app/api/adsets/[id]/status/route.ts
 import { NextRequest, NextResponse } from 'next/server'
-import { updateCampaignStatus } from '@/lib/meta-api'
+import { updateAdSetStatus } from '@/lib/meta-api'
 import { handleStatusPatch } from '@/lib/control'
 
 export async function PATCH(
@@ -8,5 +8,5 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   const { id } = await params
-  return handleStatusPatch(req, id, updateCampaignStatus)
+  return handleStatusPatch(req, id, updateAdSetStatus)
 }

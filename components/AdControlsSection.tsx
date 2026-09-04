@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'motion/react'
 import { ImageIcon, ZoomIn, X, ExternalLink } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { ConfirmModal } from './ConfirmModal'
+import { StatusToggle } from './StatusToggle'
 import { classifyCampaign } from '@/lib/campaign-classifier'
 import { sumActions, maxRoas, PURCHASE_PATTERNS, CHECKOUT_PATTERNS } from '@/lib/action-matchers'
 import { fmtBRL } from '@/lib/formatters'
@@ -124,34 +125,6 @@ function CreativeThumb({
     >
       <ImageIcon size={16} style={{ color: 'var(--mit-text-subtle)' }} />
     </div>
-  )
-}
-
-// ── Toggle switch ─────────────────────────────────────────────────────────────
-function StatusToggle({
-  active, disabled, onClick,
-}: {
-  active: boolean; disabled: boolean; onClick: () => void
-}) {
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      aria-label={active ? 'Pausar anúncio' : 'Ativar anúncio'}
-      className="relative w-11 h-6 rounded-full shrink-0 transition-colors duration-200 focus:outline-none focus-visible:ring-2 cursor-pointer"
-      style={{
-        background: active ? 'var(--mit-success)' : 'rgba(138,155,160,0.3)',
-        opacity: disabled ? 0.5 : 1,
-      }}
-    >
-      <span
-        className="absolute top-[3px] left-[3px] w-[18px] h-[18px] rounded-full bg-white shadow transition-transform duration-200"
-        style={{
-          transform: active ? 'translateX(20px)' : 'translateX(0)',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
-        }}
-      />
-    </button>
   )
 }
 
@@ -335,6 +308,7 @@ export function AdControlsSection({ tagFilter }: { tagFilter?: string }) {
                           active={isActive}
                           disabled={isMutating}
                           onClick={() => handleToggle(ad)}
+                          label={isActive ? 'Pausar anúncio' : 'Ativar anúncio'}
                         />
                       </td>
 
@@ -481,9 +455,11 @@ export function AdControlsSection({ tagFilter }: { tagFilter?: string }) {
       {pending && (
         <ConfirmModal
           open={true}
-          campaignName={pending.name}
-          budget={Math.round(pending.spend * 100)}
-          newStatus={pending.status}
+          title="▶ Reativar anúncio?"
+          itemName={pending.name}
+          detail={`Já gastou ${fmtBRL(pending.spend)} nos últimos 7 dias.`}
+          confirmLabel="Reativar"
+          tone="success"
           onConfirm={handleConfirm}
           onCancel={() => setPending(null)}
         />

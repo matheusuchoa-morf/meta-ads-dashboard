@@ -2,12 +2,13 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import {
-  LayoutDashboard, GitBranch,
+  LayoutDashboard, GitBranch, SlidersHorizontal,
   Megaphone, ChevronLeft, ChevronRight, Rocket, UserPlus
 } from 'lucide-react'
 
 const NAV_ITEMS = [
   { view: 'resumo',      label: 'Resumo',          icon: LayoutDashboard },
+  { view: 'controle',    label: 'Controle',         icon: SlidersHorizontal },
   { view: 'funil',       label: 'Funil',            icon: GitBranch },
   { view: 'anuncios',    label: 'Anúncios',          icon: Megaphone },
   { view: 'seguidores',  label: 'Seguidores',        icon: UserPlus },

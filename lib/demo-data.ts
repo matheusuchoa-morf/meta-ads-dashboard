@@ -23,6 +23,51 @@ export const DEMO_CAMPAIGNS = {
   ],
 }
 
+// ─── /api/control (aba Controle) ─────────────────────────────────────────────
+// Orçamentos em CENTAVOS, igual à Meta. A 1ª campanha usa CBO (orçamento na
+// campanha); as outras duas controlam o dinheiro no conjunto — exatamente os
+// dois casos que a tela precisa saber diferenciar.
+export const DEMO_CONTROL = {
+  campaigns: [
+    {
+      id: '11111111', name: 'NEXUS [Vendas][F] - VSL Principal',
+      objective: 'OUTCOME_SALES', status: 'ACTIVE', effective_status: 'ACTIVE',
+      daily_budget: '15000', lifetime_budget: null,
+      tag: { tag: 'nexus', label: 'Nexus', color: '#4CAF82' },
+      spend: 87.4, metaLink: '#',
+    },
+    {
+      id: '22222222', name: 'NEXUS [Vendas][Q] - Retargeting Quente',
+      objective: 'OUTCOME_SALES', status: 'ACTIVE', effective_status: 'ACTIVE',
+      daily_budget: null, lifetime_budget: null,
+      tag: { tag: 'nexus', label: 'Nexus', color: '#4A9EE8' },
+      spend: 41.9, metaLink: '#',
+    },
+    {
+      id: '33333333', name: 'NEXUS [Vendas][F] - Lookalike 1-3%',
+      objective: 'OUTCOME_SALES', status: 'PAUSED', effective_status: 'PAUSED',
+      daily_budget: null, lifetime_budget: null,
+      tag: { tag: 'nexus', label: 'Nexus', color: '#C9A45A' },
+      spend: 0, metaLink: '#',
+    },
+  ],
+}
+
+// ─── /api/campaigns/[id]/adsets ──────────────────────────────────────────────
+export const DEMO_ADSETS: Record<string, unknown[]> = {
+  '11111111': [
+    { id: '1101', name: 'Aberto 25-45', status: 'ACTIVE', effective_status: 'ACTIVE', daily_budget: null, lifetime_budget: null, spend: 52.1 },
+    { id: '1102', name: 'Interesses - Marketing', status: 'ACTIVE', effective_status: 'ACTIVE', daily_budget: null, lifetime_budget: null, spend: 35.3 },
+  ],
+  '22222222': [
+    { id: '2201', name: 'RMKT 15D - Visitantes LP', status: 'ACTIVE', effective_status: 'ACTIVE', daily_budget: '4000', lifetime_budget: null, spend: 28.6 },
+    { id: '2202', name: 'RMKT 7D - Checkout aberto', status: 'ACTIVE', effective_status: 'ACTIVE', daily_budget: '2500', lifetime_budget: null, spend: 13.3 },
+  ],
+  '33333333': [
+    { id: '3301', name: 'LAL 1% compradores', status: 'PAUSED', effective_status: 'PAUSED', daily_budget: '3000', lifetime_budget: null, spend: 0 },
+  ],
+}
+
 // ─── /api/insights ────────────────────────────────────────────────────────────
 export const DEMO_INSIGHTS = {
   kpis: {
